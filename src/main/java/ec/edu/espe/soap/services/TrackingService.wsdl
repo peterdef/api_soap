@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://logistica.com/ws/tracking"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://logistica.com/ws/tracking"
+             elementFormDefault="qualified">
+
+    <types>
+        <xs:schema targetNamespace="http://logistica.com/ws/tracking">
+
+            <!-- Definición de TrackingEvent -->
+            <xs:complexType name="TrackingEvent">
+                <xs:sequence>
+                    <xs:element name="date" type="xs:dateTime"/>
+                    <xs:element name="description" type="xs:string"/>
+                    <xs:element name="location" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Definición de TrackingError -->
+            <xs:complexType name="TrackingError">
+                <xs:sequence>
+                    <xs:element name="errorCode" type="xs:int"/>
+                    <xs:element name="errorMessage" type="xs:string"/>
+                    <xs:element name="invalidField" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <!-- Definición de GetTrackingStatusRequest -->
+            <xs:element name="GetTrackingStatusRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="trackingNumber" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Definición de GetTrackingStatusResponse -->
+            <xs:element name="GetTrackingStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="status" type="xs:string"/>
+                        <xs:element name="currentLocation" type="xs:string"/>
+                        <xs:element name="estimatedDeliveryDate" type="xs:string"/>
+                        <xs:element name="history" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="event" type="tns:TrackingEvent" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="error" type="tns:TrackingError" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:schema>
+    </types>
+
+    <!-- Definición de mensajes -->
+    <message name="GetTrackingStatusRequestMsg">
+        <part name="parameters" element="tns:GetTrackingStatusRequest"/>
+    </message>
+
+    <message name="GetTrackingStatusResponseMsg">
+        <part name="parameters" element="tns:GetTrackingStatusResponse"/>
+    </message>
+
+    <!-- Definición del PortType -->
+    <portType name="TrackingServicePortType">
+        <operation name="GetTrackingStatus">
+            <input message="tns:GetTrackingStatusRequestMsg"/>
+            <output message="tns:GetTrackingStatusResponseMsg"/>
+        </operation>
+    </portType>
+
+    <!-- Definición del Binding -->
+    <binding name="TrackingServiceBinding" type="tns:TrackingServicePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="GetTrackingStatus">
+            <soap:operation soapAction="http://logistica.com/ws/tracking/GetTrackingStatus"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- Definición del Service -->
+    <service name="TrackingService">
+        <port name="TrackingServicePort" binding="tns:TrackingServiceBinding">
+            <soap:address location="http://localhost:8080/services/TrackingService"/>
+        </port>
+    </service>
+
+</definitions>
