@@ -8,12 +8,11 @@ Este proyecto implementa un servicio SOAP para el seguimiento de paquetes de Env
 - Spring Boot 3.x
 - Apache CXF para servicios SOAP
 - JPA/Hibernate para persistencia
-- H2 Database (en memoria)
 
 ## Requisitos
 
 - JDK 17 o superior
-- Maven 3.x
+- IntellijIDEA
 
 ## Ejecución del Proyecto
 
@@ -27,24 +26,6 @@ El WSDL del servicio está disponible en:
 `http://localhost:8080/services/TrackingService?wsdl`
 
 ## Invocación del Servicio
-
-### Usando SoapUI
-
-1. Abrir SoapUI
-2. Crear nuevo proyecto SOAP
-3. Importar WSDL desde: `http://localhost:8080/services/TrackingService?wsdl`
-4. Ejemplo de request:
-
-```xml
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:log="http://logistica.com/ws/tracking">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <log:GetTrackingStatus>
-         <log:trackingNumber>PE1234567890</log:trackingNumber>
-      </log:GetTrackingStatus>
-   </soapenv:Body>
-</soapenv:Envelope>
-```
 
 ### Usando Postman
 
